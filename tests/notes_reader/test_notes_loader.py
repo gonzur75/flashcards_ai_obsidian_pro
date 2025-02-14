@@ -28,6 +28,39 @@ def file_md(note_docker: str):
     return StringIO(note_docker)
 
 
+def tags_are_normalized_with_mixed_case_and_whitespace():
+    tags = ["Python", "  pytest", "#Docker", "PYTHON", "  DOCKER"]
+
+    nl = MarkdownNotesLoader('.', tags)
+
+    assert nl.tags == {"#python", "#pytest", "#docker"}
+
+
+def find_tags_in_empty_note():
+    nl = MarkdownNotesLoader('.', [])
+    found_tags = nl.find_tags("")
+    assert found_tags == set()
+
+
+def find_tags_in_note_with_no_tags():
+    note = """
+    This is a note without any tags.
+    """
+    nl = MarkdownNotesLoader('.', [])
+    found_tags = nl.find_tags(note)
+    assert found_tags == set()
+
+
+def check_tags_with_no_matching_tags():
+    nl = MarkdownNotesLoader('.', ["#pytest", "python"])
+    assert not nl.check_tags({'#unit_tests', '#docker'})
+
+
+def check_tags_with_partial_matching_tags():
+    nl = MarkdownNotesLoader('.', ["#pytest", "python"])
+    assert nl.check_tags({'#pytest', '#docker'})
+
+
 def test_tags_are_normalized():
     tags = ["python", "#pytest", "#python", "Python", "  docker"]
 
