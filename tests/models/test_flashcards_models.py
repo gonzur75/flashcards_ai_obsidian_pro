@@ -11,7 +11,7 @@ def test_flashcard_creation_with_valid_data():
         question="What is Python?",
         answer="A programming language.",
         tags={"programming", "python"},
-        updated_at=datetime.now()
+        updated_at=datetime.now(),
     )
     assert flashcard.question == "What is Python?"
     assert flashcard.answer == "A programming language."
@@ -21,31 +21,18 @@ def test_flashcard_creation_with_valid_data():
 def test_flashcard_creation_with_empty_question():
     with pytest.raises(ValueError, match="Question: '' must be a non-empty string."):
         Flashcard(
-            question="",
-            answer="A programming language.",
-            tags={"programming", "python"},
-            updated_at=datetime.now()
+            question="", answer="A programming language.", tags={"programming", "python"}, updated_at=datetime.now()
         )
 
 
 def test_flashcard_creation_with_empty_answer():
     with pytest.raises(ValueError, match="Answer: '' must be a non-empty string."):
-        Flashcard(
-            question="What is Python?",
-            answer="",
-            tags={"programming", "python"},
-            updated_at=datetime.now()
-        )
+        Flashcard(question="What is Python?", answer="", tags={"programming", "python"}, updated_at=datetime.now())
 
 
 def test_flashcard_creation_with_empty_tags():
     with pytest.raises(ValueError, match=re.escape("Tags: set() must be a none-empty set.")):
-        Flashcard(
-            question="What is Python?",
-            answer="A programming language.",
-            tags=set(),
-            updated_at=datetime.now()
-        )
+        Flashcard(question="What is Python?", answer="A programming language.", tags=set(), updated_at=datetime.now())
 
 
 def test_flashcard_creation_with_whitespace_tags():
@@ -53,6 +40,6 @@ def test_flashcard_creation_with_whitespace_tags():
         question="What is Python?",
         answer="A programming language.",
         tags={"  programming  ", "  python  "},
-        updated_at=datetime.now()
+        updated_at=datetime.now(),
     )
     assert flashcard.tags == {"programming", "python"}

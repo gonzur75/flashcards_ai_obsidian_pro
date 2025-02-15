@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 import re
 from collections.abc import Iterable
@@ -8,6 +9,8 @@ from typing import override
 from app.models.note_models import Note
 from app.notes_reader.notes_loader_abc import NotesLoaderABC
 from app.tools.auto_repr import auto_repr
+
+logger = logging.getLogger(__name__)
 
 
 @auto_repr
@@ -51,14 +54,17 @@ class MarkdownNotesLoader(NotesLoaderABC):
     def check_tags(self, file_tags: set[str]) -> bool:
         return any(user_tag in file_tags for user_tag in self.tags)
 
-    def __get_file_list(self) -> list[str]:
+    def get_file_list(self) -> list[str]:
         file_list: list[str] = []
         for filename in os.listdir(self.folder_path):
             if filename.endswith(".md"):
                 file_list.append(filename)
+        if not file_list:
+            logger.error("no markdown file found")
+            raise FileNotFoundError
         return file_list
 
-    def __load_file(self, filename: str) -> str:
+    def load_file(self, filename: str) -> str:
         file_path = os.path.join(self.folder_path, filename)
         with open(file_path, "r", encoding="utf-8") as file:
             return file.read()
@@ -67,9 +73,9 @@ class MarkdownNotesLoader(NotesLoaderABC):
     def load(self) -> list[Note]:
         notes = []
 
-        for filename in self.__get_file_list():
+        for filename in self.get_file_list():
             file_path = os.path.join(self.folder_path, filename)
-            content = self.__load_file(file_path)
+            content = self.load_file(file_path)
             file_tags = self.find_tags(content)
             if self.check_tags(file_tags):
                 note = Note(
@@ -83,4 +89,3 @@ class MarkdownNotesLoader(NotesLoaderABC):
 
     def __str__(self) -> str:
         return f"Directory: {self.folder_path}, Tags: {'. '.join(self.tags)}."
-

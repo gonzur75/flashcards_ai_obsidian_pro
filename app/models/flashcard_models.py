@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+
 @dataclass(frozen=False, kw_only=True, slots=True)
 class Flashcard:
     question: str
