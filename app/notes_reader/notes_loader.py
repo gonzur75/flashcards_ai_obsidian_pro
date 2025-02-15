@@ -64,8 +64,8 @@ class MarkdownNotesLoader(NotesLoaderABC):
             raise FileNotFoundError
         return file_list
 
-    def load_file(self, filename: str) -> str:
-        file_path = os.path.join(self.folder_path, filename)
+    @staticmethod
+    def load_file(file_path: str) -> str:
         with open(file_path, "r", encoding="utf-8") as file:
             return file.read()
 

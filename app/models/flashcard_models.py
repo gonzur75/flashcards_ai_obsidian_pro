@@ -1,25 +1,24 @@
 from dataclasses import dataclass
-from datetime import datetime
+from enum import Enum
+
+
+class DifficultyEnum(Enum):
+    easy = "easy"
+    medium = "medium"
+    hard = "hard"
 
 
 @dataclass(frozen=False, kw_only=True, slots=True)
-class Flashcard:
-    question: str
-    answer: str
-    tags: set[str]
-    updated_at: datetime
+class FlashCard:
+    difficulty_level: DifficultyEnum
+    tags: list[str]
+    front_site: str
+    back_site: str
 
-    def __post_init__(self):
-        if not self.question:
-            raise ValueError(f"Question: {self.question!r} must be a non-empty string.")
-
-        if not self.answer:
-            raise ValueError(f"Answer: {self.answer!r} must be a non-empty string.")
-
+    def __post_init__(self) -> None:
+        if not self.front_site:
+            raise ValueError("Flashcard has to have a question.")
+        if not self.back_site:
+            raise ValueError("Flashcard has to have an answer.")
         if not self.tags:
-            raise ValueError(f"Tags: {self.tags!r} must be a none-empty set.")
-
-        self.tags = {tag.strip().lower() for tag in self.tags if tag.strip()}
-
-        if not self.tags:
-            raise ValueError(f"Tags: {self.tags!r} must be a none-empty set.")
+            raise ValueError("Tags must be a non-empty set.")
