@@ -32,7 +32,7 @@
       "class": "logging.handlers.RotatingFileHandler",
       "level": "DEBUG",
       "formatter": "json",
-      "filename": "logs/app.jsonl",
+      "filename": "logs/app.json",
       "maxBytes": 10000,
       "backupCount": 3
     },
