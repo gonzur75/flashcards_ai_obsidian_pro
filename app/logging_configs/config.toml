@@ -6,7 +6,7 @@ format = "[%(levelname)s|%(module)s|L%(lineno)d] %(asctime)s: %(message)s"
 datefmt = "%Y-%m-%dT%H:%M:%S%z"
 
 [formatters.json]
-"()" = "app.custom_logger.JSONFormatter"
+"()" = "app.logging_configs.custom_logger.JSONFormatter"
 
 [formatters.json.fmt_keys]
 level = "levelname"
@@ -29,7 +29,7 @@ class = "logging.handlers.RotatingFileHandler"
 level = "DEBUG"
 formatter = "json"
 filename = "../logs/app.toml"
-maxBytes = 10000
+maxBytes = 10_000_000
 backupCount = 3
 
 [handlers.queue_handler]

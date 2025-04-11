@@ -12,7 +12,7 @@ def setup_logging() -> None:
     if os.getenv("TESTS") == "1":
         return None
 
-    config_file: Path = Path("../.logging_configs/config.toml")
+    config_file: Path = Path("../logging_configs/config.toml")
     with open(config_file, "rb") as file:
         config: dict[str, Any] = tomllib.load(file)
 
