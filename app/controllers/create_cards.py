@@ -36,8 +36,7 @@ def create_cards() -> list[FlashCardSrc]:
                 cards.append(create_flashcard(data, note))
         elif isinstance(flashcards, dict):
             cards.append(create_flashcard(flashcards, note))
-    logger.debug(f"Created cards: {cards}")
-    typer.echo(cards)
+
     return cards
 
 

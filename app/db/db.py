@@ -6,16 +6,15 @@ from typing import cast
 
 class DBTiny:
     def __init__(self, db_dir: Path, db_file_prefix: str) -> None:
-        self._db = TinyDB(
-        path=db_dir / f"{db_file_prefix}.json", create_dirs=True)
+        self._db = TinyDB(path=db_dir / f"{db_file_prefix}.json", create_dirs=True)
 
     def create(self, item: dict) -> int:
         return cast(int, self._db.insert(item))
 
     def get(self, idx: int | list[int]) -> dict:
         if isinstance(idx, int):
-            return cast(dict, self._db.get(doc_ids=idx))
-        return cast(self._db.get(doc_id=idx))
+            return cast(dict, self._db.get(doc_id=idx))
+        return cast(dict, self._db.get(doc_ids=idx))
 
     def read_all(self) -> list[dict]:
         return cast(list[dict], self._db.all())

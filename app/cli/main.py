@@ -1,3 +1,4 @@
+import re
 import time
 from typing import Iterator
 
@@ -8,6 +9,7 @@ from rich import print
 from rich.console import Console
 
 from app.controllers.create_cards import create_cards
+from app.controllers.get_cards_by_id import get_cards_by_id
 from app.controllers.save_cards import save_cards
 # from app.models.flashcard_models import FlashCard
 from app.controllers.load_cards import load_cards
@@ -40,8 +42,10 @@ def menu() -> None:
         menu()
     elif choice == 2:
         get_cards_cli()
+        menu()
     elif choice == 3:
         print("Creating deck")
+        create_deck_cli()
     else:
         print("Thank you for using Flashcards AI")
 
@@ -84,17 +88,19 @@ def get_cards_cli() -> None:
     cards = load_cards()
     table = Table("Question", "Level", title="Flashcards AI")
     for card in cards:
-        table.add_row(card["front_site"], card["difficulty_level"])
+        table.add_row(card.front_site, card.difficulty_level.value)
+
+    console.print(table)
 
 
-# @app.command(name="create-deck")
-# def create_deck_cli() -> None:
-#     name = typer.prompt("Enter deck name:")
-#     indexes = typer.prompt("Provide indexes for deck, comma seperated", type=str)
-#     indexes_digits = (int(digit) for digiit in re.findall("\d+", indexes))
-#
-#     cards = get_cards_by_id(indexes_digits)
-#     print(cards)
+@app.command(name="create-deck")
+def create_deck_cli() -> None:
+    name = typer.prompt("Enter deck name:")
+    indexes = typer.prompt("Provide indexes for deck, comma seperated", type=str)
+    indexes_digits = [int(digit) for digit in re.findall("\d+", indexes)]
+
+    cards = get_cards_by_id(indexes_digits)
+    print(cards)
 
 if __name__ == "__main__":
 
